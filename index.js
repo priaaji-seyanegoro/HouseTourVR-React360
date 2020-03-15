@@ -1,33 +1,11 @@
 import React from "react";
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  VrButton,
-  Environment,
-  asset
-} from "react-360";
-import house from "./data/houseData";
+import { AppRegistry, StyleSheet, Text, View, VrButton } from "react-360";
+import { connect, changeRoom } from "./store";
 
 export default class Buttons extends React.Component {
-  //get data state awal
-  state = {
-    room: house.House.roomName,
-    info: house.House.info,
-    adjacentRooms: house.House.adjacentRooms
-  };
-
   //if button click set env.setbackground
   clickHandler(roomSelection) {
-    this.setState({
-      room: house[`${roomSelection}`].roomName,
-      info: house[`${roomSelection}`].info,
-      adjacentRooms: house[`${roomSelection}`].adjacentRooms
-    });
-    Environment.setBackgroundImage(
-      asset(`./360_${house[`${roomSelection}`].img}`)
-    );
+    changeRoom(roomSelection);
   }
 
   //create button navigation adjacentRooms
@@ -54,13 +32,8 @@ export default class Buttons extends React.Component {
       <View style={styles.panel}>
         <View style={styles.greetingBox}>
           <Text>Room Selection</Text>
-          <Text style={{ marginBottom: "30px" }}>{this.state.room}</Text>
-          {this.createRoomButtons(this.state.adjacentRooms)}
-        </View>
-
-        <View style={styles.greetingBox}>
-          <Text>Room Info</Text>
-          <Text>{this.state.info}</Text>
+          <Text style={{ marginBottom: "30px" }}>{this.props.room}</Text>
+          {this.createRoomButtons(this.props.adjacentRooms)}
         </View>
       </View>
     );
@@ -68,61 +41,20 @@ export default class Buttons extends React.Component {
 }
 
 export class InfoPanels extends React.Component {
-  //get data state awal
-  state = {
-    room: house.House.roomName,
-    info: house.House.info,
-    adjacentRooms: house.House.adjacentRooms
-  };
-
-  //if button click set env.setbackground
-  clickHandler(roomSelection) {
-    this.setState({
-      room: house[`${roomSelection}`].roomName,
-      info: house[`${roomSelection}`].info,
-      adjacentRooms: house[`${roomSelection}`].adjacentRooms
-    });
-    Environment.setBackgroundImage(
-      asset(`./360_${house[`${roomSelection}`].img}`)
-    );
-  }
-
-  //create button navigation adjacentRooms
-  createRoomButtons(adjacentRooms) {
-    let rooms = adjacentRooms;
-    let buttons = [];
-
-    rooms.map(room => {
-      buttons.push(
-        <VrButton
-          key={`${room}` + "-btn"}
-          onClick={() => this.clickHandler(room)}
-        >
-          <Text style={{ backgroundColor: "green" }}>{room}</Text>
-        </VrButton>
-      );
-    });
-
-    return buttons;
-  }
-
   render() {
     return (
       <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text>Room Selection</Text>
-          <Text style={{ marginBottom: "30px" }}>{this.state.room}</Text>
-          {this.createRoomButtons(this.state.adjacentRooms)}
-        </View>
-
-        <View style={styles.greetingBox}>
+        <View>
           <Text>Room Info</Text>
-          <Text>{this.state.info}</Text>
+          <Text>{this.props.info}</Text>
         </View>
       </View>
     );
   }
 }
+
+const ConnectedButtons = connect(Buttons);
+const ConnectedInfoPanels = connect(InfoPanels);
 
 const styles = StyleSheet.create({
   panel: {
@@ -141,5 +73,5 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent("Buttons", () => Buttons);
-AppRegistry.registerComponent("InfoPanels", () => InfoPanels);
+AppRegistry.registerComponent("ConnectedButtons", () => ConnectedButtons);
+AppRegistry.registerComponent("ConnectedInfoPanels", () => ConnectedInfoPanels);

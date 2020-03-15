@@ -16,20 +16,21 @@ function init(bundle, parent, options = {}) {
   //set position panel (left-right, top-bottom)
   buttonsPanel.setAngle(-0.6, 0.1);
 
-  const infoPanel = new Surface(400, 550, Surface.SurfaceShape.Flat);
-  infoPanel.setAngle(0.6, 0.1);
-
   // Render your app content to the default cylinder surface
   r360.renderToSurface(
-    r360.createRoot("Buttons", {
+    r360.createRoot("ConnectedButtons", {
       /* initial props */
     }),
     // r360.getDefaultSurface()
     buttonsPanel
   );
 
+  const infoPanel = new Surface(400, 550, Surface.SurfaceShape.Flat);
+
+  infoPanel.setAngle(0.6, 0.1);
+
   r360.renderToSurface(
-    r360.createRoot("InfoPanels", {
+    r360.createRoot("ConnectedInfoPanels", {
       /* initial props */
     }),
     infoPanel
