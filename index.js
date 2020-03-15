@@ -10,13 +10,15 @@ import {
 } from "react-360";
 import house from "./data/houseData";
 
-export default class HouseTourVR extends React.Component {
+export default class Buttons extends React.Component {
+  //get data state awal
   state = {
     room: house.House.roomName,
     info: house.House.info,
     adjacentRooms: house.House.adjacentRooms
   };
 
+  //if button click set env.setbackground
   clickHandler(roomSelection) {
     this.setState({
       room: house[`${roomSelection}`].roomName,
@@ -28,6 +30,7 @@ export default class HouseTourVR extends React.Component {
     );
   }
 
+  //create button navigation adjacentRooms
   createRoomButtons(adjacentRooms) {
     let rooms = adjacentRooms;
     let buttons = [];
@@ -51,7 +54,64 @@ export default class HouseTourVR extends React.Component {
       <View style={styles.panel}>
         <View style={styles.greetingBox}>
           <Text>Room Selection</Text>
-          <Text>{this.state.room}</Text>
+          <Text style={{ marginBottom: "30px" }}>{this.state.room}</Text>
+          {this.createRoomButtons(this.state.adjacentRooms)}
+        </View>
+
+        <View style={styles.greetingBox}>
+          <Text>Room Info</Text>
+          <Text>{this.state.info}</Text>
+        </View>
+      </View>
+    );
+  }
+}
+
+export class InfoPanels extends React.Component {
+  //get data state awal
+  state = {
+    room: house.House.roomName,
+    info: house.House.info,
+    adjacentRooms: house.House.adjacentRooms
+  };
+
+  //if button click set env.setbackground
+  clickHandler(roomSelection) {
+    this.setState({
+      room: house[`${roomSelection}`].roomName,
+      info: house[`${roomSelection}`].info,
+      adjacentRooms: house[`${roomSelection}`].adjacentRooms
+    });
+    Environment.setBackgroundImage(
+      asset(`./360_${house[`${roomSelection}`].img}`)
+    );
+  }
+
+  //create button navigation adjacentRooms
+  createRoomButtons(adjacentRooms) {
+    let rooms = adjacentRooms;
+    let buttons = [];
+
+    rooms.map(room => {
+      buttons.push(
+        <VrButton
+          key={`${room}` + "-btn"}
+          onClick={() => this.clickHandler(room)}
+        >
+          <Text style={{ backgroundColor: "green" }}>{room}</Text>
+        </VrButton>
+      );
+    });
+
+    return buttons;
+  }
+
+  render() {
+    return (
+      <View style={styles.panel}>
+        <View style={styles.greetingBox}>
+          <Text>Room Selection</Text>
+          <Text style={{ marginBottom: "30px" }}>{this.state.room}</Text>
           {this.createRoomButtons(this.state.adjacentRooms)}
         </View>
 
@@ -81,4 +141,5 @@ const styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent("HouseTourVR", () => HouseTourVR);
+AppRegistry.registerComponent("Buttons", () => Buttons);
+AppRegistry.registerComponent("InfoPanels", () => InfoPanels);
